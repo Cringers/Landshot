@@ -4,13 +4,12 @@
 #include "FPSObjectiveActor.h"
 #include "Components/SphereComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "passout/passoutCharacter.h"
 
 
 // Sets default values
 AFPSObjectiveActor::AFPSObjectiveActor()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
 
 	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComp"));
 	MeshComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
@@ -37,12 +36,16 @@ void AFPSObjectiveActor::PlayEffects()
 void AFPSObjectiveActor::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
+	UE_LOG(LogTemp, Warning, TEXT("Hello World!"));
+
 	PlayEffects();
+
+	ApassoutCharacter* myCharacter = Cast<ApassoutCharacter>(OtherActor);
+	if (myCharacter)
+	{
+		myCharacter->bIsCarryingObjective = true;
+		Destroy();
+	}
 }
 
-// Called every frame
-void AFPSObjectiveActor::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-}
 

@@ -86,10 +86,17 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 	uint8 bUsingMotionControllers : 1;
 
+	UPROPERTY(BlueprintReadOnly, Category = Gameplay)
+	bool bIsCarryingObjective;
+
 protected:
-	
+
+		
 	/** Fires a projectile. */
 	void OnFire();
+
+	UFUNCTION(Server, Reliable, WithValidation)
+	void ServerFire();
 
 	/** Resets HMD orientation and position in VR. */
 	void OnResetVR();
@@ -124,6 +131,8 @@ protected:
 	void EndTouch(const ETouchIndex::Type FingerIndex, const FVector Location);
 	void TouchUpdate(const ETouchIndex::Type FingerIndex, const FVector Location);
 	TouchData	TouchItem;
+
+	virtual void Tick(float DeltaTime) override;
 	
 protected:
 	// APawn interface
@@ -131,7 +140,7 @@ protected:
 	// End of APawn interface
 
 	/* 
-	 * Configures input for touchscreen devices if there is a valid touch interface for doing so 
+	 * Configures input for touchscreen devices if there is d valid touch interface for doing so 
 	 *
 	 * @param	InputComponent	The input component pointer to bind controls to
 	 * @returns true if touch controls were enabled.
