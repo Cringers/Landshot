@@ -13,6 +13,7 @@ class UCameraComponent;
 class UMotionControllerComponent;
 class UAnimMontage;
 class USoundBase;
+class UVoxelSimpleInvokerComponent;
 
 UCLASS(config=Game)
 class ApassoutCharacter : public ACharacter
@@ -50,6 +51,10 @@ class ApassoutCharacter : public ACharacter
 	/** Motion controller (left hand) */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UMotionControllerComponent* L_MotionController;
+
+		/** Allows Player and projectiles to interact with voxel world. */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UVoxelSimpleInvokerComponent* voxelInvoker;
 
 public:
 	ApassoutCharacter();
