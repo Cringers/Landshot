@@ -41,13 +41,11 @@ void ApassoutProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 	AVoxelWorld* world = Cast<AVoxelWorld>(OtherActor);
 	if(world)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("HIT!"));
-		TArray<FModifiedVoxelValue>* ModifiedValues = nullptr;
-		UVoxelSphereTools::RemoveSphere(world, Hit.ImpactPoint, 20.0f, ModifiedValues);
+		UVoxelSphereTools::RemoveSphere(world, Hit.ImpactPoint, 200.0f);
 	}
 	
 	// Only add impulse and destroy projectile if we hit a physics
-	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr) && OtherComp->IsSimulatingPhysics())
+	else if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr) && OtherComp->IsSimulatingPhysics())
 	{
 		OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
 
