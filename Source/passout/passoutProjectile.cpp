@@ -43,7 +43,6 @@ void ApassoutProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 	{
 		UVoxelSphereTools::RemoveSphere(world, Hit.ImpactPoint, 200.0f);
 	}
-	
 	// Only add impulse and destroy projectile if we hit a physics
 	else if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr) && OtherComp->IsSimulatingPhysics())
 	{
