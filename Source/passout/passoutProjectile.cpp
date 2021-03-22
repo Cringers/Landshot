@@ -3,6 +3,8 @@
 #include "passoutProjectile.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
+#include "VoxelTools/Gen/VoxelSphereTools.h"
+#include "VoxelWorld.h"
 
 ApassoutProjectile::ApassoutProjectile() 
 {
@@ -36,6 +38,14 @@ ApassoutProjectile::ApassoutProjectile()
 
 void ApassoutProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
+	AVoxelWorld* world = Cast<AVoxelWorld>(OtherActor);
+	if(world)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("HIT!"));
+		TArray<FModifiedVoxelValue>* ModifiedValues = nullptr;
+		UVoxelSphereTools::RemoveSphere(world, Hit.ImpactPoint, 20.0f, ModifiedValues);
+	}
+	
 	// Only add impulse and destroy projectile if we hit a physics
 	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr) && OtherComp->IsSimulatingPhysics())
 	{

@@ -36,8 +36,6 @@ void AFPSObjectiveActor::PlayEffects()
 void AFPSObjectiveActor::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
-	UE_LOG(LogTemp, Warning, TEXT("Hello World!"));
-
 	PlayEffects();
 
 	ApassoutCharacter* myCharacter = Cast<ApassoutCharacter>(OtherActor);
