@@ -36,18 +36,28 @@ ApassoutProjectile::ApassoutProjectile()
 	SetReplicateMovement(true);
 }
 
+
+void ApassoutProjectile::removeSphereOnHit_Implementation(AVoxelWorld* world, const FHitResult& Hit)
+{
+   	UVoxelSphereTools::RemoveSphere(world, Hit.ImpactPoint, 200.0f);
+}
+
+bool ApassoutProjectile::removeSphereOnHit_Validate(AVoxelWorld* world, const FHitResult& Hit)
+{
+   	return true;
+}
+
 void ApassoutProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	AVoxelWorld* world = Cast<AVoxelWorld>(OtherActor);
 	if(world)
 	{
-		UVoxelSphereTools::RemoveSphere(world, Hit.ImpactPoint, 200.0f);
+		removeSphereOnHit(world, Hit);
 	}
-	// Only add impulse and destroy projectile if we hit a physics
+	// Only add impulse and destroy projectile if we hit a physics object
 	else if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr) && OtherComp->IsSimulatingPhysics())
 	{
 		OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
-
 		Destroy();
 		
 	}

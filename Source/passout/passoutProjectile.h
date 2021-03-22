@@ -22,6 +22,9 @@ class ApassoutProjectile : public AActor
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
 	UProjectileMovementComponent* ProjectileMovement;
 
+	UFUNCTION( NetMulticast, Reliable, WithValidation )
+	void removeSphereOnHit(AVoxelWorld* world, const FHitResult& Hit);
+
 public:
 	ApassoutProjectile();
 

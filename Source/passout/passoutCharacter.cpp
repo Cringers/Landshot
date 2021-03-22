@@ -13,7 +13,6 @@
 #include "XRMotionControllerBase.h" // for FXRMotionControllerBase::RightHandSourceId
 #include "VoxelComponents/VoxelInvokerComponent.h"
 
-
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
 
 //////////////////////////////////////////////////////////////////////////
@@ -87,7 +86,6 @@ ApassoutCharacter::ApassoutCharacter()
 
 	voxelInvoker = CreateDefaultSubobject<UVoxelSimpleInvokerComponent>(TEXT("voxelInvoker"));
 	voxelInvoker->SetupAttachment(Mesh1P);
-
 }
 
 void ApassoutCharacter::BeginPlay()
