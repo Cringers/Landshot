@@ -11,8 +11,20 @@ class ApassoutGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 
+
+protected:
+
+	UPROPERTY(EditDefaultsOnly, Category = "Spectating")
+	TSubclassOf<AActor> SpectatingViewpointClass;
+
 public:
 	ApassoutGameMode();
+
+	void PawnDeath(APawn* InstigatorPawn);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "GameMode")
+	void OnPawnDeath(APawn* InstigatorPawn);
+
 };
 
 
