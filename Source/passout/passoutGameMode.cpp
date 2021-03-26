@@ -37,17 +37,9 @@ void ApassoutGameMode::PawnDeath(APawn* InstigatorPawn)
 				APlayerController* PC = Cast<APlayerController>(InstigatorPawn->GetController());
 				if (PC)
 				{
-					InstigatorPawn->DisableInput(PC); 
-					//This shit is currently not working - pawn currently still recieves input after death.
-					//Want to sleeep though.
-					
 					PC->SetViewTargetWithBlend(NewViewTarget, 0.5f, EViewTargetBlendFunction::VTBlend_Cubic);
 				}
 			}
-		}
-		else
-		{
-			UE_LOG(LogTemp, Warning, TEXT("SpectatingViewpointClass is nullptr. Please update GameMode class with valid subclass. Cannot change spectating view target."));
 		}
 	}
 
