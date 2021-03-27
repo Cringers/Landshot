@@ -1,6 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "passoutProjectile.h"
+#include "passoutCharacter.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
 #include "VoxelTools/Gen/VoxelSphereTools.h"
@@ -49,16 +50,30 @@ bool ApassoutProjectile::removeSphereOnHit_Validate(AVoxelWorld* world, const FH
 
 void ApassoutProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
+	// This is for testing purposes for the hitbox
+	// ProjectileMovement->SetVelocityInLocalSpace(FVector(0.0));
+
 	AVoxelWorld* world = Cast<AVoxelWorld>(OtherActor);
 	if(world)
 	{
 		removeSphereOnHit(world, Hit);
 	}
 	// Only add impulse and destroy projectile if we hit a physics object
-	else if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr) && OtherComp->IsSimulatingPhysics())
+	else if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr) && (OtherComp->IsSimulatingPhysics()))
 	{
-		OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
+		OtherComp->AddImpulseAtLocation(GetVelocity() * VelocityMultiplier, GetActorLocation());
 		Destroy();
 		
+	}
+	else if (ApassoutCharacter* character = Cast<ApassoutCharacter>(OtherActor))
+	{
+		//Launches the target of the projectile in the projectile's xy direction and 45 degrees pitched upward
+		FVector direction = FVector(GetVelocity());
+		direction.Z = 0;
+		direction.Normalize();
+		FRotator rot = direction.Rotation();
+		rot.Pitch = 45.0f;
+		direction = rot.Vector();
+		character->LaunchCharacter(direction * VelocityMultiplier * character->PlayerDamage, false, false); 
 	}
 }

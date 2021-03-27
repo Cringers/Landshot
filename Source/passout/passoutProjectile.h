@@ -25,6 +25,9 @@ class ApassoutProjectile : public AActor
 	UFUNCTION( NetMulticast, Reliable, WithValidation )
 	void removeSphereOnHit(AVoxelWorld* world, const FHitResult& Hit);
 
+	UPROPERTY( VisibleAnywhere, Category=Movement )
+	float VelocityMultiplier = 100.0f;
+
 public:
 	ApassoutProjectile();
 
