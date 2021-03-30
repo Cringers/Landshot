@@ -7,6 +7,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/InputSettings.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "MotionControllerComponent.h"
@@ -26,6 +27,8 @@ ApassoutCharacter::ApassoutCharacter()
 	// set our turn rates for input
 	BaseTurnRate = 45.f;
 	BaseLookUpRate = 45.f;
+	BaseSprintIncrease = 1000.0f;
+	bIsSprinting = false;
 
 	// Create a CameraComponent
 	FirstPersonCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
@@ -117,6 +120,11 @@ void ApassoutCharacter::SetupPlayerInputComponent(class UInputComponent *PlayerI
 	// set up gameplay key bindings
 	check(PlayerInputComponent);
 
+	// Bind sprint events
+	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &ApassoutCharacter::Sprint);
+	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &ApassoutCharacter::StopSprinting);
+
+
 	// Bind jump events
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
@@ -151,6 +159,16 @@ void ApassoutCharacter::Tick(float DeltaTime)
 		NewRot.Pitch = RemoteViewPitch * 360.0f / 255.0f;
 		FirstPersonCameraComponent->SetRelativeRotation(NewRot);
 	}
+}
+
+void ApassoutCharacter::Sprint(){
+	bIsSprinting = true;
+	GetCharacterMovement()->MaxWalkSpeed += BaseSprintIncrease;
+}
+
+void ApassoutCharacter::StopSprinting(){
+	bIsSprinting = false;
+	GetCharacterMovement()->MaxWalkSpeed -= BaseSprintIncrease;
 }
 
 void ApassoutCharacter::OnFire()
@@ -247,6 +265,7 @@ void ApassoutCharacter::MoveForward(float Value)
 	{
 		// add movement in that direction
 		AddMovementInput(GetActorForwardVector(), Value);
+
 	}
 }
 
