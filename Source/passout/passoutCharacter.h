@@ -103,6 +103,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gameplay)
 	bool bIsCarryingObjective;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	float PlayerDamage = 7.0f;
+
 protected:
 
 	/* Makes Character sprint */
