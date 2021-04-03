@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "passoutGameState.h"
+#include "Gameplay/passoutGameState.h"
 
 void ApassoutGameState::MulticastOnPawnDeath_Implementation(APawn* InstigatorPawn)
 {
