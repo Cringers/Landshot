@@ -1,7 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "passoutProjectile.h"
-#include "passoutCharacter.h"
+#include "Gameplay/passoutProjectile.h"
+#include "Gameplay/passoutCharacter.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
 #include "VoxelTools/Gen/VoxelSphereTools.h"

@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "passoutKillZone.h"
+#include "Gameplay/passoutKillZone.h"
 #include "Components/BoxComponent.h"
-#include "passout/passoutCharacter.h"
-#include "passout/passoutGameMode.h"
+#include "Gameplay/passoutCharacter.h"
+#include "Gameplay/passoutGameMode.h"
 #include "Kismet/GameplayStatics.h"
 
 

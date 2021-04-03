@@ -1,9 +1,9 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "passoutGameMode.h"
-#include "passoutHUD.h"
-#include "passoutCharacter.h"
-#include "passoutGameState.h"
+#include "Gameplay/passoutGameMode.h"
+#include "UI/passoutHUD.h"
+#include "Gameplay/passoutCharacter.h"
+#include "Gameplay/passoutGameState.h"
 #include "Kismet/GameplayStatics.h"
 #include "UObject/ConstructorHelpers.h"
 
