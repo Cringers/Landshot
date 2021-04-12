@@ -49,7 +49,11 @@ void ApassoutGameMode::PawnDeath(APawn* InstigatorPawn)
 		GS->MulticastOnPawnDeath(InstigatorPawn);
 	}
 
-
-	OnPawnDeath(InstigatorPawn);
-
+	EndRound();
 }
+
+void ApassoutGameMode::EndRound()
+{
+	UE_LOG(LogTemp, Log, TEXT("Round is over!"));
+}
+

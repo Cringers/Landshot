@@ -20,10 +20,12 @@ protected:
 public:
 	ApassoutGameMode();
 
+	UFUNCTION()
 	void PawnDeath(APawn* InstigatorPawn);
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "GameMode")
-	void OnPawnDeath(APawn* InstigatorPawn);
+private:
+	UFUNCTION()
+	void EndRound();
 
 };
 
