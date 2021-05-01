@@ -116,9 +116,18 @@ protected:
 
 	/** Fires a projectile. */
 	void OnFire();
+	
+	/** Plays firing animation/sound effects */
+	void PlayFireEffects() const;
+
+	/** Eats a portion of the voxel world **/
+	void OnAltFire();
 
 	UFUNCTION(Server, Reliable, WithValidation)
 	void ServerFire();
+	
+	UFUNCTION(Server, Reliable, WithValidation)
+    void ServerAltFire();
 
 	/** Resets HMD orientation and position in VR. */
 	void OnResetVR();
