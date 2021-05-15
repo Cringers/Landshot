@@ -25,6 +25,8 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "GameMode")
 	void OnPawnDeath(APawn* InstigatorPawn);
 
+	virtual void HandleStartingNewPlayer_Implementation(APlayerController*) override;
+
 };
 
 
