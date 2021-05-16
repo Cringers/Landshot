@@ -57,3 +57,10 @@ void ApassoutGameMode::EndRound()
 	UE_LOG(LogTemp, Log, TEXT("Round is over!"));
 }
 
+//Set input to game mode from UI mode
+void ApassoutGameMode::HandleStartingNewPlayer_Implementation(APlayerController * NewPlayer)
+{
+	Super::HandleStartingNewPlayer_Implementation(NewPlayer);
+	NewPlayer->SetInputMode(FInputModeGameOnly());
+	NewPlayer->SetShowMouseCursor(false);
+}

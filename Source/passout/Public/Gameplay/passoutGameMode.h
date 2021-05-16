@@ -27,6 +27,8 @@ private:
 	UFUNCTION()
 	void EndRound();
 
+	virtual void HandleStartingNewPlayer_Implementation(APlayerController*) override;
+
 };
 
 
