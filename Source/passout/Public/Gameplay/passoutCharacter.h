@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
+#include "VoxelWorld.h"
 #include "GameFramework/Character.h"
 #include "passoutCharacter.generated.h"
 
@@ -127,7 +129,10 @@ protected:
 	void ServerFire();
 	
 	UFUNCTION(Server, Reliable, WithValidation)
-    void ServerAltFire();
+    void ServerAltFire(FVector Start, FVector End);
+
+	UFUNCTION(NetMulticast, Reliable)
+    void MulticastAltFire(AVoxelWorld* world, FVector position, float radius);
 
 	/** Resets HMD orientation and position in VR. */
 	void OnResetVR();

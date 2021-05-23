@@ -201,7 +201,11 @@ void ApassoutCharacter::OnFire()
 
 void ApassoutCharacter::OnAltFire()
 {
-	ServerAltFire();
+	APlayerCameraManager* CameraManager = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0);
+	FVector Start = CameraManager->GetCameraLocation();
+	FVector End = Start + CameraManager->GetActorForwardVector() * 100000.0f;
+	
+	ServerAltFire(Start, End);
 	PlayFireEffects();
 }
 
@@ -242,12 +246,8 @@ bool ApassoutCharacter::ServerFire_Validate()
 }
 
 
-void ApassoutCharacter::ServerAltFire_Implementation()
+void ApassoutCharacter::ServerAltFire_Implementation(FVector Start, FVector End)
 {
-	APlayerCameraManager* CameraManager = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0);
-	FVector Start = CameraManager->GetCameraLocation();
-	FVector End = Start + CameraManager->GetActorForwardVector() * 100000.0f;
-
 	FCollisionQueryParams CollisionParams;
 	CollisionParams.AddIgnoredComponent(GetCapsuleComponent());
 
@@ -256,16 +256,28 @@ void ApassoutCharacter::ServerAltFire_Implementation()
 	{
 		if (OutHit.GetActor() != nullptr && OutHit.GetActor()->IsA(AVoxelWorld::StaticClass()))
 		{
-			AVoxelWorld* world = Cast<AVoxelWorld>(OutHit.GetActor());
-			UVoxelSphereTools::RemoveSphere(world, OutHit.ImpactPoint, 50.0f);
+			AVoxelWorld* World = Cast<AVoxelWorld>(OutHit.GetActor());
+			if (World)
+			{
+				MulticastAltFire(World, OutHit.ImpactPoint, 50.0f);
+			}
 		}
 	}
 }
 
-bool ApassoutCharacter::ServerAltFire_Validate()
+
+bool ApassoutCharacter::ServerAltFire_Validate(FVector Start, FVector End)
 {
 	return true;
 }
+
+
+void ApassoutCharacter::MulticastAltFire_Implementation(AVoxelWorld* World, const FVector Position, const float Radius)
+{
+	UE_LOG(LogTemp, Warning, TEXT("MULTICAST"));
+	UVoxelSphereTools::RemoveSphere(World, Position, Radius);
+}
+
 
 void ApassoutCharacter::OnResetVR()
 {
