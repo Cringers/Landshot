@@ -11,9 +11,10 @@
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "MotionControllerComponent.h"
+#include "VoxelWorld.h"
 #include "XRMotionControllerBase.h" // for FXRMotionControllerBase::RightHandSourceId
 #include "VoxelComponents/VoxelInvokerComponent.h"
-
+#include "VoxelTools/Gen/VoxelSphereTools.h"
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
 
 //////////////////////////////////////////////////////////////////////////
@@ -131,6 +132,7 @@ void ApassoutCharacter::SetupPlayerInputComponent(class UInputComponent *PlayerI
 
 	// Bind fire event
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &ApassoutCharacter::OnFire);
+	PlayerInputComponent->BindAction("AltFire", IE_Pressed, this, &ApassoutCharacter::OnAltFire);
 
 	// Enable touchscreen input
 	EnableTouchscreenMovement(PlayerInputComponent);
@@ -171,10 +173,8 @@ void ApassoutCharacter::StopSprinting(){
 	GetCharacterMovement()->MaxWalkSpeed -= BaseSprintIncrease;
 }
 
-void ApassoutCharacter::OnFire()
+void ApassoutCharacter::PlayFireEffects() const
 {
-	ServerFire();
-
 	// try and play the sound if specified
 	if (FireSound != nullptr)
 	{
@@ -191,6 +191,22 @@ void ApassoutCharacter::OnFire()
 			AnimInstance->Montage_Play(FireAnimation, 1.f);
 		}
 	}
+}
+
+void ApassoutCharacter::OnFire()
+{
+	ServerFire();
+	PlayFireEffects();
+}
+
+void ApassoutCharacter::OnAltFire()
+{
+	APlayerCameraManager* CameraManager = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0);
+	FVector Start = CameraManager->GetCameraLocation();
+	FVector End = Start + CameraManager->GetActorForwardVector() * 100000.0f;
+	
+	ServerAltFire(Start, End);
+	PlayFireEffects();
 }
 
 void ApassoutCharacter::ServerFire_Implementation()
@@ -228,6 +244,40 @@ bool ApassoutCharacter::ServerFire_Validate()
 {
 	return true;
 }
+
+
+void ApassoutCharacter::ServerAltFire_Implementation(FVector Start, FVector End)
+{
+	FCollisionQueryParams CollisionParams;
+	CollisionParams.AddIgnoredComponent(GetCapsuleComponent());
+
+	FHitResult OutHit;
+	if(GetWorld()->LineTraceSingleByChannel(OutHit, Start, End, ECC_WorldDynamic, CollisionParams))
+	{
+		if (OutHit.GetActor() != nullptr && OutHit.GetActor()->IsA(AVoxelWorld::StaticClass()))
+		{
+			AVoxelWorld* World = Cast<AVoxelWorld>(OutHit.GetActor());
+			if (World)
+			{
+				MulticastAltFire(World, OutHit.ImpactPoint, 50.0f);
+			}
+		}
+	}
+}
+
+
+bool ApassoutCharacter::ServerAltFire_Validate(FVector Start, FVector End)
+{
+	return true;
+}
+
+
+void ApassoutCharacter::MulticastAltFire_Implementation(AVoxelWorld* World, const FVector Position, const float Radius)
+{
+	UE_LOG(LogTemp, Warning, TEXT("MULTICAST"));
+	UVoxelSphereTools::RemoveSphere(World, Position, Radius);
+}
+
 
 void ApassoutCharacter::OnResetVR()
 {
